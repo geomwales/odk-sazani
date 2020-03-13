@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 
+import org.odk.collect.android.tasks.GeoFencingJob;
 import org.odk.collect.android.tasks.ServerPollingJob;
 
 public class CollectJobCreator implements JobCreator {
@@ -34,6 +35,9 @@ public class CollectJobCreator implements JobCreator {
 
             case ServerPollingJob.TAG:
                 return new ServerPollingJob();
+
+            case GeoFencingJob.TAG:
+                return new GeoFencingJob();
 
             default:
                 return null;

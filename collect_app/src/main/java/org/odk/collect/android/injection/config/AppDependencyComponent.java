@@ -20,6 +20,7 @@ import org.odk.collect.android.openrosa.OpenRosaAPIClient;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.FormMetadataFragment;
 import org.odk.collect.android.preferences.ServerPreferencesFragment;
+import org.odk.collect.android.tasks.GeoFencingJob;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.ServerPollingJob;
 import org.odk.collect.android.tasks.sms.SmsNotificationReceiver;
@@ -101,6 +102,8 @@ public interface AppDependencyComponent {
     void inject(FormDownloader formDownloader);
 
     void inject(ServerPollingJob serverPollingJob);
+
+    void inject(GeoFencingJob geoFencingJob);
 
     void inject(AuthDialogUtility authDialogUtility);
 
