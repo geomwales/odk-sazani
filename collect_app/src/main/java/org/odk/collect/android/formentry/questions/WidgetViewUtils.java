@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -13,9 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.ViewIds;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonWidget;
 
@@ -62,7 +62,7 @@ public class WidgetViewUtils {
 
     public static ImageView createAnswerImageView(Context context, Bitmap bitmap) {
         final ImageView imageView = new ImageView(context);
-        imageView.setId(ViewIds.generateViewId());
+        imageView.setId(View.generateViewId());
         imageView.setTag("ImageView");
         imageView.setPadding(10, 10, 10, 10);
         imageView.setAdjustViewBounds(true);
@@ -87,7 +87,7 @@ public class WidgetViewUtils {
             button.setLayoutParams(params);
 
             button.setOnClickListener(v -> {
-                if (Collect.allowClick(QuestionWidget.class.getName())) {
+                if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
                     ((ButtonWidget) listener).onButtonClick(withId);
                 }
             });

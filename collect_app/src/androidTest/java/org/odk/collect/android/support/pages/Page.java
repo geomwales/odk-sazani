@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAction;
-
 import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
@@ -43,7 +42,7 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
-import static org.odk.collect.android.test.CustomMatchers.withIndex;
+import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
@@ -124,9 +123,15 @@ abstract class Page<T extends Page<T>> {
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {
-        onView(withText(message))
-                .inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
+        try {
+            onView(withText(message))
+                    .inRoot(withDecorView(not(is(getCurrentActivity().getWindow().getDecorView()))))
+                    .check(matches(isDisplayed()));
+        } catch (RuntimeException e) {
+            // The exception we get out of this is really misleading so cleaning it up here
+            throw new RuntimeException("No Toast with text \"" + message + "\" shown on screen!");
+        }
+
 
         return (T) this;
     }
