@@ -1,5 +1,9 @@
 package org.odk.collect.utilities;
 
+import android.annotation.SuppressLint;
+
+@SuppressLint("all")
+
 /**
  * Point on 2D landscape
  *

@@ -130,7 +130,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         disableSmsIfNeeded();
 
-        GeoFencingJob.schedulePeriodicJob(Collect.getInstance().getString(R.string.every_fifteen_minutes_value));
+        //GeoFencingJob.triggerImmediateJob();
+        GeoFencingJob.schedulePeriodicJob(Collect.getInstance().getString(R.string.every_thirty_minutes_value));
 
         // enter data button. expects a result.
         Button enterDataButton = findViewById(R.id.enter_data);
@@ -245,8 +246,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         {
             // dynamically construct the "ODK Collect vA.B" string
             TextView mainMenuMessageLabel = findViewById(R.id.main_menu_header);
-            mainMenuMessageLabel.setText(Collect.getInstance()
-                    .getVersionedAppName());
+            //mainMenuMessageLabel.setText(Collect.getInstance()o.getVersionedAppName());
         }
 
         StoragePathProvider storagePathProvider = new StoragePathProvider();
@@ -655,95 +655,5 @@ public class MainMenuActivity extends CollectAbstractActivity {
                     .show();
         }
     }
-/**
-    public class ScheduledJobService extends JobService implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
-        private GoogleApiClient mGoogleApiClient;
-        LocationRequest mLocationRequest;
 
-        @Override
-        public boolean onStartJob(JobParameters job) {
-            Log.d("token", "Start Job Called");
-            setUpLocationClientIfNeeded();
-            mLocationRequest = LocationRequest.create();
-            // Use high accuracy
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(30000);
-            return true;
-        }
-
-        @Override
-        public boolean onStopJob(JobParameters job) {
-            Log.d("token", "stopped");
-            return true;
-        }
-
-        @Override
-        public void onConnected(Bundle bundle) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient,
-                    mLocationRequest, this); // This is the changed line.
-        }
-
-        @Override
-        public void onConnectionSuspended(int i) {
-
-        }
-
-        @Override
-        public void onConnectionFailed(ConnectionResult connectionResult) {
-
-        }
-
-        private void setUpLocationClientIfNeeded() {
-            if (mGoogleApiClient == null)
-                buildGoogleApiClient();
-        }
-
-        protected synchronized void buildGoogleApiClient() {
-            this.mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-            this.mGoogleApiClient.connect();
-        }
-
-        @Override
-        public void onLocationChanged(Location location) {
-            //Log.d("token",location.getLatitude()+""+location.getLongitude());
-            if (location != null) {
-                // lm.removeUpdates(locListener);
-                double Longitude = location.getLongitude();
-                double Latitude = location.getLatitude();
-                /*  Toast.makeText(MainActivity.this,
-                            "Longitude :" + Longitude + " Latitude :" + Latitude,
-                            Toast.LENGTH_LONG).show();
-
-                Polygon polygon = Polygon.Builder()
-                        .addVertex(new Point(52.432433, -4.050661)) // change polygon  according to your location
-                        .addVertex(new Point(52.405893, -4.086109))
-                        .addVertex(new Point(52.397200, -4.055639))
-                        .addVertex(new Point(52.412490, -4.044824)).build();
-
-
-                //  isInside(polygon, new Point((float)Latitude, (float)Longitude));
-
-                if (polygon.contains(new Point((float) Latitude, (float) Longitude)) == true) {
-                    Toast.makeText(MainMenuActivity.this, "You are inside", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(MainMenuActivity.this, "You are outside", Toast.LENGTH_LONG).show();
-
-                }
-                // /////////////do something//////////////
-                // insertSalesOrder();
-
-                Log.i("TTTAG", "Latitude:" + Latitude);
-                Log.i("TTTAG", "Longitude:" + Longitude);
-
-                //if (gpsProgressDialog.isShowing()) {
-                //    gpsProgressDialog.dismiss();
-                //}
-            }
-        }
-    }
-        */
 }

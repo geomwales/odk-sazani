@@ -1,5 +1,7 @@
 package org.odk.collect.android.tasks;
 
+import android.annotation.SuppressLint;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Handler;
 import android.util.Log;
 
@@ -25,10 +28,15 @@ import org.odk.collect.android.location.client.LocationClients;
 import org.odk.collect.utilities.Point;
 import org.odk.collect.utilities.Polygon;
 
+import java.util.Vector;
+
+@SuppressLint("all")
+
 public class GeoFencingJob extends Job implements LocationListener {
 
     private static final long ONE_MINUTE_PERIOD = 60000;
     private static final long FIFTEEN_MINUTES_PERIOD = 900000;
+    private static final long THIRTY_MINUTES_PERIOD = 1800000;
     private static final long ONE_HOUR_PERIOD = 3600000;
     private static final long SIX_HOURS_PERIOD = 21600000;
     private static final long ONE_DAY_PERIOD = 86400000;
@@ -39,6 +47,8 @@ public class GeoFencingJob extends Job implements LocationListener {
     private Handler handler;
     private NotificationChannel mChannel;
     private String CHANNEL_ID = "my_channel_01";
+
+    private Location previousLocation = null;
 
     public GeoFencingJob() {
         org.odk.collect.android.application.Collect.getInstance().getComponent().inject(this);
@@ -94,12 +104,18 @@ public class GeoFencingJob extends Job implements LocationListener {
             }
         });
 
-
-
         return Result.SUCCESS;
     }
 
 
+    public static void triggerImmediateJob()
+    {
+        new JobRequest.Builder(TAG)
+                .setUpdateCurrent(true)
+                .startNow()
+                .build()
+                .scheduleAsync();
+    }
 
     public static void schedulePeriodicJob(String selectedOption) {
         if (selectedOption.equals(Collect.getInstance().getString(R.string.never_value))) {
@@ -108,6 +124,8 @@ public class GeoFencingJob extends Job implements LocationListener {
             long period = FIFTEEN_MINUTES_PERIOD;
             if (selectedOption.equals(Collect.getInstance().getString(R.string.every_one_hour_value))) {
                 period = ONE_HOUR_PERIOD;
+            } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_thirty_minutes_value))) {
+                period = THIRTY_MINUTES_PERIOD;
             } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_six_hours_value))) {
                 period = SIX_HOURS_PERIOD;
             } else if (selectedOption.equals(Collect.getInstance().getString(R.string.every_24_hours_value))) {
@@ -133,21 +151,31 @@ public class GeoFencingJob extends Job implements LocationListener {
                             "Longitude :" + Longitude + " Latitude :" + Latitude,
                             Toast.LENGTH_LONG).show();*/
 
+            Context context = org.odk.collect.android.application.Collect.getInstance().getApplicationContext();
+
+            if(previousLocation == null) {
+                previousLocation = location;
+                return;
+            }
+
+          /**
             Polygon polygon = Polygon.Builder()
                     .addVertex(new Point(6.048857f, 80.211021f)) // change polygon  according to your location
                     .addVertex(new Point(6.048137f, 80.210546f))
                     .addVertex(new Point(6.048590f, 80.210197f))
                     .addVertex(new Point(6.049163f, 80.211050f)).build();
 
-            Context context = org.odk.collect.android.application.Collect.getInstance().getApplicationContext();
 
 
             //  isInside(polygon, new Point((float)Latitude, (float)Longitude));
 
+
             // if (polygon.contains(new Point((double) Latitude, (double) Longitude)) == true)
             if (polygon.contains(new Point((double) Latitude, (double) Longitude)) != true)
             {
-
+            */
+          if(location.distanceTo(previousLocation) < 10.0f)
+          {
               // Toast.makeText(org.odk.collect.android.application.Collect.getInstance().getApplicationContext(), "You are inside", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context, MainMenuActivity.class);
                 PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
@@ -161,7 +189,7 @@ public class GeoFencingJob extends Job implements LocationListener {
                 }
 
                 Notification noti = notibuild
-                        .setContentTitle("You are inside!")
+                        .setContentTitle(context.getString(R.string.geofence_pester_msg))
                         .setContentText("Launch the app").setSmallIcon(R.drawable.mapbox_compass_icon)
                         .setContentIntent(pIntent)
                         .build();
@@ -171,11 +199,9 @@ public class GeoFencingJob extends Job implements LocationListener {
 
                 notificationManager.notify(0, noti);
 
-            } else {
-
-              //Toast.makeText(context, "You are outside", Toast.LENGTH_LONG).show();
-
             }
+
+          previousLocation = location;
             // /////////////do something//////////////
             // insertSalesOrder();
 
