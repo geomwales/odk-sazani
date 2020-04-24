@@ -93,6 +93,15 @@
                         tools:text="@string/manage_files" />
 
                     <TextView
+                        android:id="@+id/attribution"
+                        style="@style/TextAppearance.Collect.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/margin_standard"
+                        tools:text="Built on ODK Collect" />
+
+                    <TextView
                         android:id="@+id/version_sha"
                         style="@style/TextAppearance.Collect.Caption"
                         android:layout_width="wrap_content"
