@@ -420,6 +420,8 @@
     <string name="odk_forum_summary">Join the forum to get support, request features, contribute code/translations! </string>
     <string name="all_open_source_licenses">Open source libraries/licenses</string>
     <string name="all_open_source_licenses_msg">We stand on the shoulders of giants!</string>
+    <string name="geom_data">GEOM and Sazani</string>
+    <string name="geom_data_msg">About Sazani Associates and the GEOM Project at Aberystwyth University</string>
 
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->

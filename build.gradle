@@ -48,17 +48,17 @@ task checkTests(type: GradleBuild) {
 
 task checkFeature(type: GradleBuild) {
     tasks = ["connectedDebugAndroidTest"]
-    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.feature"]
+    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.sazani.collect.android.feature"]
 }
 
 task checkRegression(type: GradleBuild) {
     tasks = ["connectedDebugAndroidTest"]
-    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.regression"]
+    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.sazani.collect.android.regression"]
 }
 
 task checkInstrumented(type: GradleBuild) {
     tasks = ["connectedDebugAndroidTest"]
-    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.instrumented"]
+    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.sazani.collect.android.instrumented"]
 }
 
 ext {
